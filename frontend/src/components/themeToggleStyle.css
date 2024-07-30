@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
+.btn-ombre {
+  background: none;
+  border: 2px solid #ffd700; /* Classic yellow border */
+  padding: 10px 12px;
+  border-radius: 50%; /* Circular button */
+  cursor: pointer;
+  font-size: 1.5em;
+  font-weight: bold;
+  background-color: white; /* Classic yellow background */
+  color: #ffd500; /* Black text color for better contrast */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, border-color 0.3s; /* Smooth transition */
+}
+
+.btn-ombre:hover {
+  background-color: #d1d1d1; /* Lighter background on hover */
+  border-color: #ffcc00; /* Slightly lighter border on hover */
+  color: #ffcc00; /* Text color remains black on hover */
+}
+
+[data-theme='dark'] .btn-ombre {
+  background-color: #444; /* Dark background for dark theme */
+  border-color: #666; /* Darker border for dark theme */
+  color: #ffcc00; /* Yellow text for dark theme */
+}
+
+[data-theme='dark'] .btn-ombre:hover {
+  background-color: #333; /* Slightly darker background on hover */
+  border-color: #999; /* Slightly lighter border on hover */
+  color: #ffd700; /* Brighter yellow text on hover */
+}

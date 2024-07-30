@@ -1,0 +1,167 @@
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --light-ombre-text: linear-gradient(45deg, #9d8fec, #d188dc); /* Pastel lavender to pastel pink */
+  --dark-ombre-text: linear-gradient(45deg, #50337b, #2f2c72); /* Purple to blue */
+}
+
+[data-theme='dark'] {
+  --background-color: #333333;
+  --text-color: #ffffff;
+}
+
+button.theme-toggle {
+  background: var(--light-ombre-text);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -ms-background-clip: text;
+  -o-background-clip: text;
+  color: transparent;
+}
+
+[data-theme='dark'] button.theme-toggle {
+  background: var(--dark-ombre-text);
+}
+
+button.get-started {
+  background: var(--light-ombre-text);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+[data-theme='dark'] button.get-started {
+  background: var(--dark-ombre-text);
+}
+
+/* Sample Resume Styles */
+.sample-resume {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-color);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -ms-background-clip: text;
+  -o-background-clip: text;
+  color: transparent;
+  background-image: var(--light-ombre-text);
+}
+
+[data-theme='dark'] .sample-resume {
+  background-image: var(--dark-ombre-text);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  header nav ul li {
+    margin-right: 10px;
+  }
+
+  button.theme-toggle, button.get-started {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .sample-resume {
+    font-size: 16px;
+  }
+}
+
+
+
+
+
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --light-ombre-text: linear-gradient(45deg, #9d8fec, #d188dc); /* Pastel lavender to pastel pink */
+  --dark-ombre-text: linear-gradient(45deg, #50337b, #2f2c72); /* Purple to blue */
+}
+
+[data-theme='dark'] {
+  --background-color: #333333;
+  --text-color: #ffffff;
+}
+
+button.theme-toggle {
+  background: var(--light-ombre-text);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -ms-background-clip: text;
+  -o-background-clip: text;
+  color: transparent;
+}
+
+[data-theme='dark'] button.theme-toggle {
+  background: var(--dark-ombre-text);
+}
+
+button.get-started {
+  background: var(--light-ombre-text);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+[data-theme='dark'] button.get-started {
+  background: var(--dark-ombre-text);
+}
+
+/* Sample Resume Styles */
+.sample-resume {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-color);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -ms-background-clip: text;
+  -o-background-clip: text;
+  color: transparent;
+  background-image: var(--light-ombre-text);
+}
+
+[data-theme='dark'] .sample-resume {
+  background-image: var(--dark-ombre-text);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  header nav ul li {
+    margin-right: 10px;
+  }
+
+  button.theme-toggle, button.get-started {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .sample-resume {
+    font-size: 16px;
+  }
+}

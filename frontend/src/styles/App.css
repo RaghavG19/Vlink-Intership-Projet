@@ -1,0 +1,372 @@
+.App {
+  text-align: center;
+}
+
+:root {
+  --primary-color: #007bff;
+  --sidebar-bg-color: #f8f9fa;
+  --button-bg-color: #007bff;
+  --button-text-color: #ffffff;
+  --preview-bg-color: #ffffff;
+  --border-color: #dee2e6;
+  --input-bg-color: #ffffff;
+  --skill-bg-color: #e9ecef;
+  --skill-text-color: #495057;
+}
+
+[data-theme='dark'] {
+  --background-color: #333333;
+  --text-color: #ffffff;
+  --sidebar-bg-color: #2c2c2c;
+  --button-bg-color: #0056b3;
+  --button-text-color: #ffffff;
+  --preview-bg-color: #2c2c2c;
+  --border-color: #555555;
+  --input-bg-color: #444444;
+  --skill-bg-color: #555555;
+  --skill-text-color: #ffffff;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', Arial, sans-serif;
+}
+
+footer {
+  background-color: #16181b;
+  color: white;
+  padding: 0%;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  translate: 0 25%;
+  text-align: center;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+form div {
+  margin: 10px 0;
+}
+
+form label {
+  display: block;
+}
+
+form input {
+  width: 200px;
+  padding: 5px;
+}
+
+form button {
+  margin-top: 10px;
+  padding: 5px 10px;
+}
+
+/*for a responsive site*/
+
+/* Base styles (default styles for larger screens) */
+.header {
+  padding: 10px 20px;
+}
+
+.navbar {
+  height: 70px;
+}
+
+.navbar-brand a{
+  font-size: 200%;
+}
+
+.nav-link {
+  margin-right: 15px;
+  font-size: 1em;
+}
+
+.theme-toggle {
+  padding: 10px;
+  font-size: 1.5em;
+}
+
+/* Medium screens (tablets, 768px and up) */
+@media (max-width: 992px) {
+  .header {
+    padding: 8px 16px;
+  }
+
+  .navbar {
+    height: 60px;
+  }
+
+  .navbar-brand a{
+    font-size: 150%;
+  }
+
+  .nav-link {
+    margin-right: 10px;
+    font-size: 0.9em;
+  }
+
+  .theme-toggle {
+    padding: 8px;
+    font-size: 1.2em;
+  }
+}
+
+/* Small screens (mobile devices, 576px and up) */
+@media (max-width: 768px) {
+  .header {
+    padding: 6px 12px;
+  }
+
+  .navbar {
+    height: 60px;
+  }
+
+  .navbar-brand a{
+    font-size: 150%;
+  }
+
+  .nav-link {
+    margin-right: 5px;
+    font-size: 0.8em;
+  }
+
+  .theme-toggle {
+    padding: 6px;
+    font-size: 1em;
+  }
+}
+
+/* Extra small screens (portrait phones, less than 576px) */
+@media (max-width: 576px) {
+  .header {
+    padding: 4px 8px;
+  }
+
+  .navbar {
+    height: 50px;
+  }
+
+  .navbar-brand a{
+    font-size: 100%;
+  }
+
+  .nav-link {
+    margin-right: 3px;
+    font-size: 0.7em;
+  }
+
+  .theme-toggle {
+    padding: 4px;
+    font-size: 0.9em;
+  }
+}
+
+
+
+
+.App {
+  text-align: center;
+}
+
+:root {
+  --primary-color: #007bff;
+  --sidebar-bg-color: #f8f9fa;
+  --button-bg-color: #007bff;
+  --button-text-color: #ffffff;
+  --preview-bg-color: #ffffff;
+  --border-color: #dee2e6;
+  --input-bg-color: #ffffff;
+  --skill-bg-color: #e9ecef;
+  --skill-text-color: #495057;
+}
+
+[data-theme='dark'] {
+  --background-color: #333333;
+  --text-color: #ffffff;
+  --sidebar-bg-color: #2c2c2c;
+  --button-bg-color: #0056b3;
+  --button-text-color: #ffffff;
+  --preview-bg-color: #2c2c2c;
+  --border-color: #555555;
+  --input-bg-color: #444444;
+  --skill-bg-color: #555555;
+  --skill-text-color: #ffffff;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Roboto', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', Arial, sans-serif;
+}
+
+footer {
+  background-color: #16181b;
+  color: white;
+  padding: 0.5%;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+form div {
+  margin: 10px 0;
+}
+
+form label {
+  display: block;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background-color: var(--input-bg-color);
+  color: var(--text-color);
+}
+
+form button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Responsive Design */
+
+.header {
+  padding: 10px 20px;
+}
+
+.navbar {
+  height: 70px;
+}
+
+.navbar-brand a {
+  font-size: 200%;
+}
+
+.nav-link {
+  margin-right: 15px;
+  font-size: 1em;
+}
+
+.theme-toggle {
+  padding: 10px;
+  font-size: 1.5em;
+}
+
+/* Medium screens (tablets, 768px and up) */
+@media (max-width: 992px) {
+  .header {
+    padding: 8px 16px;
+  }
+
+  .navbar {
+    height: 60px;
+  }
+
+  .navbar-brand a {
+    font-size: 150%;
+  }
+
+  .nav-link {
+    margin-right: 10px;
+    font-size: 0.9em;
+  }
+
+  .theme-toggle {
+    padding: 8px;
+    font-size: 1.2em;
+  }
+}
+
+/* Small screens (mobile devices, 576px and up) */
+@media (max-width: 768px) {
+  .header {
+    padding: 6px 12px;
+  }
+
+  .navbar {
+    height: 60px;
+  }
+
+  .navbar-brand a {
+    font-size: 150%;
+  }
+
+  .nav-link {
+    margin-right: 5px;
+    font-size: 0.8em;
+  }
+
+  .theme-toggle {
+    padding: 6px;
+    font-size: 1em;
+  }
+}
+
+/* Extra small screens (portrait phones, less than 576px) */
+@media (max-width: 576px) {
+  .header {
+    padding: 4px 8px;
+  }
+
+  .navbar {
+    height: 50px;
+  }
+
+  .navbar-brand a {
+    font-size: 100%;
+  }
+
+  .nav-link {
+    margin-right: 3px;
+    font-size: 0.7em;
+  }
+
+  .theme-toggle {
+    padding: 4px;
+    font-size: 0.9em;
+  }
+}
+
