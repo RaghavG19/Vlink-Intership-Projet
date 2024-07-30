@@ -1,0 +1,392 @@
+.resume-builder {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.resume-builder-sidebar {
+  width: 200px;
+  background-color: var(--sidebar-bg-color);
+  padding: 20px;
+}
+
+.resume-builder-content {
+  flex: 1;
+  padding: 20px;
+  max-width: 40%; /* Add this line */
+}
+
+.resume-preview {
+  flex: 1; /* Change this from width: 40% to flex: 1 */
+  padding: 20px;
+  background-color: var(--preview-bg-color);
+  border-left: 1px solid var(--border-color);
+  overflow-y: auto; /* Add this line to enable scrolling */
+}
+
+.resume-builder-sidebar button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-section input,
+.form-section textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background-color: var(--input-bg-color);
+  color: var(--text-color);
+}
+
+.work-experience-item,
+.education-item {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-item {
+  background-color: var(--skill-bg-color);
+  color: var(--skill-text-color);
+  padding: 5px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.skill-item button {
+  background: none;
+  border: none;
+  color: var(--skill-text-color);
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.preview-content {
+  font-size: 0.9em;
+}
+
+.preview-content h1 {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.preview-content h2 {
+  font-size: 1.2em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.preview-content h3 {
+  font-size: 1.1em;
+  margin-bottom: 0.3em;
+}
+
+.preview-content ul {
+  padding-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .resume-builder {
+    flex-direction: column;
+  }
+
+  .resume-builder-sidebar {
+    width: 100%;
+  }
+
+  .resume-preview {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+  }
+}
+
+.resume-builder-page {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.form-container {
+  width: 45%;
+}
+
+.preview-container {
+  width: 45%;
+  background-color: var(--preview-bg-color);
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 5;
+  border-radius: 5px;
+}
+
+.resume-preview {
+  text-align: left;
+}
+
+.resume-preview h1 {
+  font-size: 24px;
+}
+
+.resume-preview h2 {
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.resume-preview p {
+  margin: 5px 0;
+}
+
+
+
+
+
+.resume-builder {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.resume-builder-sidebar {
+  width: 15%;
+}
+
+.resume-builder-sidebar button:hover {
+  background-color: #e0e0e0;
+}
+
+.resume-builder-content {
+  width: 40%;
+  padding: 0 20px;
+}
+
+.form-section input,
+.form-section textarea {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.form-section button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+}
+
+.resume-preview {
+  width: 40%;
+  border-left: 1px solid #e4e4e4;
+  padding-left: 20px;
+}
+
+.resume {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.resume h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.resume h2 {
+  font-size: 18px;
+  border-bottom: 1px solid #ccc;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.resume h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.resume ul {
+  margin-top: 5px;
+  padding-left: 20px;
+}
+
+.skills-list,
+.achievements-list,
+.projects-list,
+.extracurricular-list,
+.leadership-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.skill-item,
+.achievement-item,
+.project-item,
+.extracurricular-item,
+.leadership-item {
+  background-color: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.skill-item button,
+.achievement-item button,
+.project-item button,
+.extracurricular-item button,
+.leadership-item button {
+  margin-left: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: #888;
+}
+
+.education-item,
+.work-experience-item {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.resume-preview .resume {
+  font-size: 0.85em; /* Smaller font size */
+  font-weight: bold; /* Bolder font */
+}
+
+.resume-preview .resume h1,
+.resume-preview .resume h2,
+.resume-preview .resume h3 {
+  font-size: 1em; /* Adjust header sizes accordingly */
+  font-weight: bold; /* Ensure headers are bold */
+}
+
+.resume-preview .resume p,
+.resume-preview .resume ul,
+.resume-preview .resume li {
+  font-size: 0.85em; /* Ensure all text elements are uniformly smaller */
+  font-weight: bold; /* Ensure all text elements are uniformly bold */
+}
+
+/* ResumeBuilderStyle.css */
+
+.resume-builder {
+  display: flex;
+  height: 100vh;
+}
+
+.resume-builder-sidebar {
+  flex: 0 0 200px;
+  background: #f5f5f5;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.resume-builder-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: #fff;
+}
+
+.resume-preview {
+  flex: 1;
+  padding: 20px;
+  background: #f0f0f0;
+  overflow-y: auto;
+}
+
+.resume-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.resume-header h1 {
+  font-size: 1.2em; /* Make the font size smaller */
+  font-weight: bold; /* Make the font bolder */
+}
+
+.resume-header p {
+  font-size: 0.8em; /* Make the font size smaller */
+  font-weight: bold; /* Make the font bolder */
+}
+
+.form-section {
+  margin-bottom: 20px;
+}
+
+.form-section h2 {
+  margin-bottom: 10px;
+}
+
+.education-item,
+.work-experience-item {
+  margin-bottom: 10px;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.skill-item {
+  background: #ddd;
+  padding: 5px 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+}
+
+.skill-item button {
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  line-height: 1;
+  margin-left: 5px;
+}
+
+.achievement-item,
+.project-item,
+.extracurricular-item,
+.leadership-item {
+  margin-bottom: 10px;
+}
+
+.achievement-item button,
+.project-item button,
+.extracurricular-item button,
+.leadership-item button {
+  display: block;
+  margin-top: 5px;
+}
+
+/* Centering Basic Info */
+.resume-preview header {
+  text-align: center;
+}
+
