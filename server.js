@@ -15,8 +15,15 @@ connectDB();
 // Create an Express application
 const app = express();
 
+// CORS options
+const corsOptions = {
+  origin: 'http://localhost:3000', // Replace with your frontend URL
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type,Authorization'
+};
+
 // Middleware
-app.use(cors()); // Enable CORS
+app.use(cors(corsOptions)); // Enable CORS with specific options
 app.use(bodyParser.json()); // Parse JSON request bodies
 
 // Define routes
