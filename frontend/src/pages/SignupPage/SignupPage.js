@@ -28,15 +28,22 @@ const SignupPage = () => {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         // Redirect to login page with success message
         navigate("/login", {
           state: { message: "Signup successful! Please log in." },
         });
       }
     } catch (error) {
-      console.error("There was an error signing up!", error);
-      alert("There was an error signing up. Please try again.");
+      console.error(
+        "There was an error signing up!",
+        error.response ? error.response.data : error.message
+      );
+      alert(
+        error.response && error.response.data
+          ? error.response.data.msg
+          : "There was an error signing up. Please try again."
+      );
     }
   };
 

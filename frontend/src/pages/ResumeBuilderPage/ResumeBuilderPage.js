@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import html2pdf from "html2pdf.js";
 import "./ResumeBuilderStyle.css";
+import axios from "axios";
 
 const ResumeBuilderPage = () => {
   const [resumeData, setResumeData] = useState({
@@ -49,6 +51,21 @@ const ResumeBuilderPage = () => {
   const [newProject, setNewProject] = useState("");
   const [newExtracurricular, setNewExtracurricular] = useState("");
   const [newLeadership, setNewLeadership] = useState("");
+
+  useEffect(() => {
+    const fetchResumeData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/resumes/user/{userId}"
+        );
+        setResumeData(response.data);
+      } catch (error) {
+        console.error("Error fetching resume data:", error);
+      }
+    };
+
+    fetchResumeData();
+  }, []);
 
   const handleInputChange = (section, index, field, value) => {
     setResumeData((prevData) => {
@@ -575,6 +592,37 @@ const ResumeBuilderPage = () => {
     }
   };
 
+  // Save resume data
+  const saveResumeData = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/resumes",
+        resumeData
+      );
+      console.log("Resume data saved:", response.data);
+    } catch (error) {
+      console.error("Error saving resume data:", error);
+    }
+  };
+
+  const downloadPdf = () => {
+    const element = document.getElementById("resume-preview"); // Assuming 'resume-preview' is the id of your resume preview container
+    const opt = {
+      margin: 0,
+      filename: "my_resume.pdf",
+      image: { type: "jpeg", quality: 0.99 },
+      html2canvas: { scale: 2 },
+      jsPDF: {
+        unit: "in",
+        format: "a4",
+        orientation: "portrait",
+      },
+    };
+
+    // New Promise-based usage:
+    html2pdf().set(opt).from(element).save();
+  };
+
   return (
     <div className="resume-builder">
       <div className="resume-builder-sidebar">
@@ -598,7 +646,7 @@ const ResumeBuilderPage = () => {
         </button>
       </div>
       <div className="resume-builder-content">{renderForm()}</div>
-      <div className="resume-preview">
+      <div className="resume-preview" id="resume-preview">
         {/* <h2>Resume Preview</h2> */}
         <div className="resume">
           <header>
@@ -606,7 +654,7 @@ const ResumeBuilderPage = () => {
               {resumeData.basicInfo.firstName} {resumeData.basicInfo.lastName}
             </h1>
             <p>
-              {resumeData.basicInfo.email} | {resumeData.basicInfo.contact} |{" "}
+              {resumeData.basicInfo.email}| {resumeData.basicInfo.contact} |{" "}
               {resumeData.basicInfo.address}
             </p>
             <p>
@@ -703,6 +751,7 @@ const ResumeBuilderPage = () => {
           </section>
         </div>
       </div>
+      <button onClick={downloadPdf}>Download as PDF</button>
     </div>
   );
 };

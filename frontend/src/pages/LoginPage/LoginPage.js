@@ -3,19 +3,19 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./LoginStyle.css";
 
+const LOGIN_API_URL = "http://localhost:5000/api/users/login"; // Define your API endpoint
+
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showMessage, setShowMessage] = useState(false); // State to manage message visibility
-  const [loginError, setLoginError] = useState(""); // State to manage login errors
+  const [showMessage, setShowMessage] = useState(false); // Manage message visibility
+  const [loginError, setLoginError] = useState(""); // Manage login errors
+  const [loading, setLoading] = useState(false); // Manage loading state
   const navigate = useNavigate();
-
-  // Access location state
   const location = useLocation();
   const { state } = location;
   const message = state?.message; // Get the success message from state if available
 
-  // Use effect to set a timeout for hiding the message
   useEffect(() => {
     if (message) {
       setShowMessage(true);
@@ -28,24 +28,38 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your API call here
+
+    // Basic client-side validation
+    if (!email || !password) {
+      setLoginError("Email and password are required.");
+      return;
+    }
+
+    setLoading(true); // Set loading state to true
+
     try {
-      const response = await fetch("", {
+      const response = await fetch(LOGIN_API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
+
       const data = await response.json();
-      if (data.success) {
+
+      if (response.ok) {
+        // Successful login
         navigate("/resume-builder");
       } else {
+        // Handle login error
         setLoginError(data.message || "Invalid email or password");
       }
     } catch (error) {
       console.error("Login error:", error);
       setLoginError("An error occurred. Please try again later.");
+    } finally {
+      setLoading(false); // Set loading state to false
     }
   };
 
@@ -58,24 +72,30 @@ const LoginPage = () => {
       {/* Display login error message */}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Email:</label>
+          <label htmlFor="email">Email:</label>
           <input
+            id="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            aria-required="true"
           />
         </div>
         <div>
-          <label>Password:</label>
+          <label htmlFor="password">Password:</label>
           <input
+            id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            aria-required="true"
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
         <p className="signupLink">
           New User? Click here to{" "}
           <Link to="/signup" className="signupclick">

@@ -1,9 +1,11 @@
-
-const express = require('express'); // Import Express framework
-const { authMiddleware } = require('../middleware/authMiddleware'); // Import authentication middleware
-const { createResumeValidation, updateResumeValidation } = require('../middleware/validation/resumeValidation'); // Import resume validation rules
-const { validationResult } = require('express-validator'); // Import express-validator for validation results
-const resumeController = require('../controllers/resumeController'); // Import resume controller
+const express = require("express"); // Import Express framework
+const { authMiddleware } = require("../middleware/authMiddleware"); // Import authentication middleware
+const {
+  createResumeValidation,
+  updateResumeValidation,
+} = require("../middleware/validation/resumeValidation"); // Import resume validation rules
+const { validationResult } = require("express-validator"); // Import express-validator for validation results
+const resumeController = require("../controllers/resumeController"); // Import resume controller
 
 const router = express.Router(); // Create a new router instance
 
@@ -12,7 +14,7 @@ router.use(authMiddleware);
 
 // Create Resume
 router.post(
-  '/',
+  "/",
   createResumeValidation, // Apply validation rules for creating a resume
   (req, res, next) => {
     const errors = validationResult(req); // Check for validation errors
@@ -26,11 +28,13 @@ router.post(
 
 // Get Resume by ID
 router.get(
-  '/:id',
+  "/:id",
   (req, res, next) => {
     // Validation for ID parameter
     if (!req.params.id) {
-      return res.status(400).json({ errors: [{ msg: 'Resume ID is required' }] });
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "Resume ID is required" }] });
     }
     next(); // Proceed to the next middleware or route handler
   },
@@ -39,7 +43,7 @@ router.get(
 
 // Update Resume
 router.put(
-  '/:id',
+  "/:id",
   updateResumeValidation, // Apply validation rules for updating a resume
   (req, res, next) => {
     const errors = validationResult(req); // Check for validation errors
@@ -53,11 +57,13 @@ router.put(
 
 // Delete Resume
 router.delete(
-  '/:id',
+  "/:id",
   (req, res, next) => {
     // Validation for ID parameter
     if (!req.params.id) {
-      return res.status(400).json({ errors: [{ msg: 'Resume ID is required' }] });
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "Resume ID is required" }] });
     }
     next(); // Proceed to the next middleware or route handler
   },
