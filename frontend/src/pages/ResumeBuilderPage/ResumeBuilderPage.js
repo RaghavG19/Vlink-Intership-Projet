@@ -2,6 +2,18 @@ import React, { useState, useEffect } from "react";
 import html2pdf from "html2pdf.js";
 import "./ResumeBuilderStyle.css";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+
+const getTokenFromLocalStorage = () => {
+  const token = localStorage.getItem("token");
+  return token;
+};
+
+// Function to get user ID from token
+const getUserIdFromToken = (token) => {
+  const decoded = jwtDecode(token);
+  return decoded._id;
+};
 
 const ResumeBuilderPage = () => {
   const [resumeData, setResumeData] = useState({
@@ -52,20 +64,37 @@ const ResumeBuilderPage = () => {
   const [newExtracurricular, setNewExtracurricular] = useState("");
   const [newLeadership, setNewLeadership] = useState("");
 
-  useEffect(() => {
-    const fetchResumeData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/resumes/user/{userId}"
-        );
-        setResumeData(response.data);
-      } catch (error) {
-        console.error("Error fetching resume data:", error);
-      }
-    };
+  const token = getTokenFromLocalStorage();
+  if (!token) {
+    console.error("No token found, cannot fetch resume data");
+    return;
+  }
 
-    fetchResumeData();
-  }, []);
+  const fetchResumeData = async () => {
+    const userId = getUserIdFromToken(token);
+    if (!userId) {
+      console.error("No user ID found in token, cannot fetch resume data");
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setResumeData(response.data);
+    } catch (error) {
+      console.error("Error fetching resume data:", error);
+    }
+  };
+
+  // useEffect(() => {
+  //   fetchResumeData();
+  // }, [token]);
 
   const handleInputChange = (section, index, field, value) => {
     setResumeData((prevData) => {
@@ -163,6 +192,13 @@ const ResumeBuilderPage = () => {
     setNewLeadership("");
   };
 
+  const saveAndContinue = (nextSection) => {
+    // Save resume data to the server
+    saveResumeData();
+    // Move to the next section
+    setActiveSection(nextSection);
+  };
+
   const renderForm = () => {
     switch (activeSection) {
       case "basicInfo":
@@ -232,6 +268,9 @@ const ResumeBuilderPage = () => {
                 handleInputChange("basicInfo", 0, "objective", e.target.value)
               }
             />
+            <button onClick={() => saveAndContinue("skills")}>
+              Save and Continue
+            </button>
           </div>
         );
       case "education":
@@ -337,6 +376,9 @@ const ResumeBuilderPage = () => {
               </div>
             ))}
             <button onClick={() => addItem("education")}>Add Education</button>
+            <button onClick={() => saveAndContinue("skills")}>
+              Save and Continue
+            </button>
           </div>
         );
       case "workExperience":
@@ -404,6 +446,9 @@ const ResumeBuilderPage = () => {
             ))}
             <button onClick={() => addItem("workExperience")}>
               Add Work Experience
+            </button>
+            <button onClick={() => saveAndContinue("skills")}>
+              Save and Continue
             </button>
           </div>
         );
@@ -477,6 +522,9 @@ const ResumeBuilderPage = () => {
                 </span>
               ))}
             </div>
+            <button onClick={() => saveAndContinue("skills")}>
+              Save and Continue
+            </button>
           </div>
         );
       case "achievements":
@@ -504,6 +552,9 @@ const ResumeBuilderPage = () => {
                 </div>
               ))}
             </div>
+            <button onClick={() => saveAndContinue("skills")}>
+              Save and Continue
+            </button>
           </div>
         );
       case "projects":
@@ -531,6 +582,9 @@ const ResumeBuilderPage = () => {
                 </div>
               ))}
             </div>
+            <button onClick={() => saveAndContinue("skills")}>
+              Save and Continue
+            </button>
           </div>
         );
       case "extracurricular":
@@ -558,6 +612,9 @@ const ResumeBuilderPage = () => {
                 </div>
               ))}
             </div>
+            <button onClick={() => saveAndContinue("skills")}>
+              Save and Continue
+            </button>
           </div>
         );
       case "leadership":
@@ -585,6 +642,9 @@ const ResumeBuilderPage = () => {
                 </div>
               ))}
             </div>
+            <button onClick={() => saveAndContinue("skills")}>
+              Save and Continue
+            </button>
           </div>
         );
       default:
@@ -595,10 +655,13 @@ const ResumeBuilderPage = () => {
   // Save resume data
   const saveResumeData = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/resumes",
-        resumeData
-      );
+      const response = await axios("http://localhost:5000/api/resumes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: resumeData,
+        method: "post",
+      });
       console.log("Resume data saved:", response.data);
     } catch (error) {
       console.error("Error saving resume data:", error);

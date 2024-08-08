@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./LoginStyle.css";
+// import Cookies from "js-cookie";
 
 const LOGIN_API_URL = "http://localhost:5000/api/users/login"; // Define your API endpoint
 
@@ -50,6 +51,7 @@ const LoginPage = () => {
 
       if (response.ok) {
         // Successful login
+        localStorage.setItem("token", data.token);
         navigate("/resume-builder");
       } else {
         // Handle login error
