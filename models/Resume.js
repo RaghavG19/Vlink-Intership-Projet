@@ -3,6 +3,10 @@ const mongoose = require("mongoose"); // Import Mongoose for MongoDB interaction
 // Define the Resume schema with validation
 const resumeSchema = new mongoose.Schema(
   {
+    userId: {
+      type: String,
+      required: [true, "UserId name is required"],
+    },
     basicInfo: {
       firstName: {
         type: String,
@@ -130,47 +134,23 @@ const resumeSchema = new mongoose.Schema(
     skills: {
       technical: {
         type: [String],
-        validate: [
-          (array) => array.length > 0,
-          "At least one technical skill is required",
-        ],
       },
       soft: {
         type: [String],
-        validate: [
-          (array) => array.length > 0,
-          "At least one soft skill is required",
-        ],
       },
       additional: [String], // Optional additional skills
     },
     achievements: {
       type: [String],
-      validate: [
-        (array) => array.length > 0,
-        "At least one achievement is required",
-      ],
     },
     projects: {
       type: [String],
-      validate: [
-        (array) => array.length > 0,
-        "At least one project is required",
-      ],
     },
     extracurricular: {
       type: [String],
-      validate: [
-        (array) => array.length > 0,
-        "At least one extracurricular activity is required",
-      ],
     },
     leadership: {
       type: [String],
-      validate: [
-        (array) => array.length > 0,
-        "At least one leadership experience is required",
-      ],
     },
   },
   {

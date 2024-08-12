@@ -21,7 +21,7 @@ const authMiddleware = async (req, res, next) => {
     next();
   } catch (err) {
     console.error(err);
-    res.status(401).json({ message: "Forbiden" });
+    res.status(401).json({ message: "Bad request" });
   }
 };
 

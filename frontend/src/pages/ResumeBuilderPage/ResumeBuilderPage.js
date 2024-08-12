@@ -2,20 +2,55 @@ import React, { useState, useEffect } from "react";
 import html2pdf from "html2pdf.js";
 import "./ResumeBuilderStyle.css";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-
-const getTokenFromLocalStorage = () => {
-  const token = localStorage.getItem("token");
-  return token;
-};
 
 // Function to get user ID from token
 const getUserIdFromToken = (token) => {
-  const decoded = jwtDecode(token);
-  return decoded._id;
+  try {
+    const decoded = jwtDecode(token);
+    return decoded?.user?.id;
+  } catch (error) {
+    console.error("Invalid token", error);
+    return null;
+  }
 };
 
 const ResumeBuilderPage = () => {
+  const [resumeExists, setResumeExists] = useState(false);
+  useEffect(() => {
+    const fetchResumeData = async () => {
+      const token = localStorage.getItem("token");
+      const userId = getUserIdFromToken(token);
+      if (!token || !userId) {
+        console.error("No token found, cannot fetch resume data");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/resumes/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data.length >= 0) {
+          setResumeData(response.data);
+          setResumeExists(true);
+        } else {
+          setResumeExists(false);
+        }
+      } catch (error) {
+        console.error("Error fetching resume data:", error);
+      }
+    };
+
+    fetchResumeData();
+  }, []);
+
   const [resumeData, setResumeData] = useState({
     basicInfo: {
       firstName: "",
@@ -63,38 +98,6 @@ const ResumeBuilderPage = () => {
   const [newProject, setNewProject] = useState("");
   const [newExtracurricular, setNewExtracurricular] = useState("");
   const [newLeadership, setNewLeadership] = useState("");
-
-  const token = getTokenFromLocalStorage();
-  if (!token) {
-    console.error("No token found, cannot fetch resume data");
-    return;
-  }
-
-  const fetchResumeData = async () => {
-    const userId = getUserIdFromToken(token);
-    if (!userId) {
-      console.error("No user ID found in token, cannot fetch resume data");
-      return;
-    }
-
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/api/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setResumeData(response.data);
-    } catch (error) {
-      console.error("Error fetching resume data:", error);
-    }
-  };
-
-  // useEffect(() => {
-  //   fetchResumeData();
-  // }, [token]);
 
   const handleInputChange = (section, index, field, value) => {
     setResumeData((prevData) => {
@@ -192,11 +195,64 @@ const ResumeBuilderPage = () => {
     setNewLeadership("");
   };
 
-  const saveAndContinue = (nextSection) => {
-    // Save resume data to the server
-    saveResumeData();
-    // Move to the next section
+  // Save resume data
+  const saveAndContinue = async (nextSection) => {
+    await saveResumeData(activeSection);
     setActiveSection(nextSection);
+  };
+  const saveResumeData = async (section) => {
+    const token = localStorage.getItem("token");
+    const userId = getUserIdFromToken(token);
+    //if else sstatement if data was fetched or not
+    try {
+      let response;
+      if (resumeExists) {
+        // If resume data was fetched, perform PUT operation
+        await axios.put(
+          `http://localhost:5000/api/resumes/${userId}`,
+          resumeData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Resume data saved:", response.data);
+      } else {
+        // If no resume data was fetched, perform POST operation
+        console.log("No resume data found, initializing empty resume.");
+        const newResume = await axios.post(
+          `http://localhost:5000/api/resumes`,
+          { userId, [section]: resumeData[section] },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setResumeExists(true); // Set to true after successful POST
+      }
+    } catch (error) {
+      console.error("Error saving resume data:", error);
+    }
+  };
+
+  const downloadPdf = () => {
+    const element = document.getElementById("resume-preview"); // Assuming 'resume-preview' is the id of your resume preview container
+    const opt = {
+      margin: 0,
+      filename: "my_resume.pdf",
+      image: { type: "jpeg", quality: 0.99 },
+      html2canvas: { scale: 2 },
+      jsPDF: {
+        unit: "in",
+        format: "a4",
+        orientation: "portrait",
+      },
+    };
+
+    // New Promise-based usage:
+    html2pdf().set(opt).from(element).save();
   };
 
   const renderForm = () => {
@@ -268,7 +324,7 @@ const ResumeBuilderPage = () => {
                 handleInputChange("basicInfo", 0, "objective", e.target.value)
               }
             />
-            <button onClick={() => saveAndContinue("skills")}>
+            <button onClick={() => saveAndContinue("education")}>
               Save and Continue
             </button>
           </div>
@@ -376,7 +432,7 @@ const ResumeBuilderPage = () => {
               </div>
             ))}
             <button onClick={() => addItem("education")}>Add Education</button>
-            <button onClick={() => saveAndContinue("skills")}>
+            <button onClick={() => saveAndContinue("workExperience")}>
               Save and Continue
             </button>
           </div>
@@ -522,7 +578,7 @@ const ResumeBuilderPage = () => {
                 </span>
               ))}
             </div>
-            <button onClick={() => saveAndContinue("skills")}>
+            <button onClick={() => saveAndContinue("achievements")}>
               Save and Continue
             </button>
           </div>
@@ -552,7 +608,7 @@ const ResumeBuilderPage = () => {
                 </div>
               ))}
             </div>
-            <button onClick={() => saveAndContinue("skills")}>
+            <button onClick={() => saveAndContinue("projects")}>
               Save and Continue
             </button>
           </div>
@@ -582,7 +638,7 @@ const ResumeBuilderPage = () => {
                 </div>
               ))}
             </div>
-            <button onClick={() => saveAndContinue("skills")}>
+            <button onClick={() => saveAndContinue("extracurricular")}>
               Save and Continue
             </button>
           </div>
@@ -612,7 +668,7 @@ const ResumeBuilderPage = () => {
                 </div>
               ))}
             </div>
-            <button onClick={() => saveAndContinue("skills")}>
+            <button onClick={() => saveAndContinue("leadership")}>
               Save and Continue
             </button>
           </div>
@@ -639,51 +695,18 @@ const ResumeBuilderPage = () => {
                   <button onClick={() => removeItem("leadership", index)}>
                     x
                   </button>
+                  <button onClick={() => saveAndContinue("leadership")}>
+                    Save and Continue
+                  </button>
                 </div>
               ))}
             </div>
-            <button onClick={() => saveAndContinue("skills")}>
-              Save and Continue
-            </button>
+            <button onClick={downloadPdf}>Download as PDF</button>
           </div>
         );
       default:
         return null;
     }
-  };
-
-  // Save resume data
-  const saveResumeData = async () => {
-    try {
-      const response = await axios("http://localhost:5000/api/resumes", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        data: resumeData,
-        method: "post",
-      });
-      console.log("Resume data saved:", response.data);
-    } catch (error) {
-      console.error("Error saving resume data:", error);
-    }
-  };
-
-  const downloadPdf = () => {
-    const element = document.getElementById("resume-preview"); // Assuming 'resume-preview' is the id of your resume preview container
-    const opt = {
-      margin: 0,
-      filename: "my_resume.pdf",
-      image: { type: "jpeg", quality: 0.99 },
-      html2canvas: { scale: 2 },
-      jsPDF: {
-        unit: "in",
-        format: "a4",
-        orientation: "portrait",
-      },
-    };
-
-    // New Promise-based usage:
-    html2pdf().set(opt).from(element).save();
   };
 
   return (
@@ -710,14 +733,13 @@ const ResumeBuilderPage = () => {
       </div>
       <div className="resume-builder-content">{renderForm()}</div>
       <div className="resume-preview" id="resume-preview">
-        {/* <h2>Resume Preview</h2> */}
         <div className="resume">
           <header>
             <h1>
               {resumeData.basicInfo.firstName} {resumeData.basicInfo.lastName}
             </h1>
             <p>
-              {resumeData.basicInfo.email}| {resumeData.basicInfo.contact} |{" "}
+              {resumeData.basicInfo.email} | {resumeData.basicInfo.contact} |{" "}
               {resumeData.basicInfo.address}
             </p>
             <p>

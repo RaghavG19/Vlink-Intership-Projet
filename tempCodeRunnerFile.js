@@ -1,1 +1,1 @@
-app.use("/api/users", userRoutes);
+/api/res
