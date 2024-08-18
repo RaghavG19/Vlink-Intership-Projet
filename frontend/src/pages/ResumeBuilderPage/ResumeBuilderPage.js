@@ -36,13 +36,15 @@ const ResumeBuilderPage = () => {
             },
           }
         );
-
-        if (response.data.length >= 0) {
-          setResumeData(response.data);
-          setResumeExists(true);
-        } else {
-          setResumeExists(false);
-        }
+        setResumeData(response.data.data[0]);
+        setResumeExists(true);
+        // if (response.data.length >= 0) {
+        //   console.log(response.data);
+        //   setResumeData(response.data);
+        //   setResumeExists(true);
+        // } else {
+        //   setResumeExists(false);
+        // }
       } catch (error) {
         console.error("Error fetching resume data:", error);
       }
@@ -50,7 +52,6 @@ const ResumeBuilderPage = () => {
 
     fetchResumeData();
   }, []);
-
   const [resumeData, setResumeData] = useState({
     basicInfo: {
       firstName: "",
@@ -144,6 +145,7 @@ const ResumeBuilderPage = () => {
       [section]: [...prevData[section], newItem],
     }));
   };
+  // console.log(resumeData);
 
   const removeItem = (section, index) => {
     setResumeData((prevData) => ({
@@ -210,14 +212,14 @@ const ResumeBuilderPage = () => {
         // If resume data was fetched, perform PUT operation
         await axios.put(
           `http://localhost:5000/api/resumes/${userId}`,
-          resumeData,
+          { userId, [section]: resumeData[section] },
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        console.log("Resume data saved:", response.data);
+        console.log("Resume data saved:", response.data.data);
       } else {
         // If no resume data was fetched, perform POST operation
         console.log("No resume data found, initializing empty resume.");
@@ -234,6 +236,45 @@ const ResumeBuilderPage = () => {
       }
     } catch (error) {
       console.error("Error saving resume data:", error);
+    }
+  };
+  const deleteResume = async () => {
+    const token = localStorage.getItem("token");
+    const userId = getUserIdFromToken(token);
+
+    try {
+      await axios.delete(`http://localhost:5000/api/resumes/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setResumeData({
+        basicInfo: {
+          firstName: "",
+          lastName: "",
+          contact: "",
+          address: "",
+          email: "",
+          linkedin: "",
+          github: "",
+          objective: "",
+        },
+        education: [],
+        workExperience: [],
+        skills: {
+          technical: [],
+          soft: [],
+          additional: [],
+        },
+        achievements: [],
+        projects: [],
+        extracurricular: [],
+        leadership: [],
+      });
+      setResumeExists(false);
+      console.log("Resume deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting resume:", error);
     }
   };
 
@@ -264,7 +305,7 @@ const ResumeBuilderPage = () => {
             <input
               type="text"
               placeholder="First Name"
-              value={resumeData.basicInfo.firstName}
+              value={resumeData.basicInfo.firstName || ""}
               onChange={(e) =>
                 handleInputChange("basicInfo", 0, "firstName", e.target.value)
               }
@@ -272,7 +313,7 @@ const ResumeBuilderPage = () => {
             <input
               type="text"
               placeholder="Last Name"
-              value={resumeData.basicInfo.lastName}
+              value={resumeData.basicInfo.lastName || ""}
               onChange={(e) =>
                 handleInputChange("basicInfo", 0, "lastName", e.target.value)
               }
@@ -280,7 +321,7 @@ const ResumeBuilderPage = () => {
             <input
               type="text"
               placeholder="Contact"
-              value={resumeData.basicInfo.contact}
+              value={resumeData.basicInfo.contact || ""}
               onChange={(e) =>
                 handleInputChange("basicInfo", 0, "contact", e.target.value)
               }
@@ -288,7 +329,7 @@ const ResumeBuilderPage = () => {
             <input
               type="text"
               placeholder="Address"
-              value={resumeData.basicInfo.address}
+              value={resumeData.basicInfo.address || ""}
               onChange={(e) =>
                 handleInputChange("basicInfo", 0, "address", e.target.value)
               }
@@ -296,7 +337,7 @@ const ResumeBuilderPage = () => {
             <input
               type="email"
               placeholder="Email"
-              value={resumeData.basicInfo.email}
+              value={resumeData.basicInfo.email || ""}
               onChange={(e) =>
                 handleInputChange("basicInfo", 0, "email", e.target.value)
               }
@@ -304,7 +345,7 @@ const ResumeBuilderPage = () => {
             <input
               type="url"
               placeholder="LinkedIn"
-              value={resumeData.basicInfo.linkedin}
+              value={resumeData.basicInfo.linkedin || ""}
               onChange={(e) =>
                 handleInputChange("basicInfo", 0, "linkedin", e.target.value)
               }
@@ -312,14 +353,14 @@ const ResumeBuilderPage = () => {
             <input
               type="url"
               placeholder="GitHub"
-              value={resumeData.basicInfo.github}
+              value={resumeData.basicInfo.github || ""}
               onChange={(e) =>
                 handleInputChange("basicInfo", 0, "github", e.target.value)
               }
             />
             <textarea
               placeholder="Objective"
-              value={resumeData.basicInfo.objective}
+              value={resumeData.basicInfo.objective || ""}
               onChange={(e) =>
                 handleInputChange("basicInfo", 0, "objective", e.target.value)
               }
@@ -338,7 +379,7 @@ const ResumeBuilderPage = () => {
                 <input
                   type="text"
                   placeholder="Degree"
-                  value={edu.degree}
+                  value={edu.degree || ""}
                   onChange={(e) =>
                     handleInputChange(
                       "education",
@@ -351,7 +392,7 @@ const ResumeBuilderPage = () => {
                 <input
                   type="text"
                   placeholder="Institute"
-                  value={edu.institute}
+                  value={edu.institute || ""}
                   onChange={(e) =>
                     handleInputChange(
                       "education",
@@ -364,7 +405,7 @@ const ResumeBuilderPage = () => {
                 <input
                   type="text"
                   placeholder="Field of Study"
-                  value={edu.fieldOfStudy}
+                  value={edu.fieldOfStudy || ""}
                   onChange={(e) =>
                     handleInputChange(
                       "education",
@@ -377,7 +418,7 @@ const ResumeBuilderPage = () => {
                 <input
                   type="text"
                   placeholder="Location"
-                  value={edu.location}
+                  value={edu.location || ""}
                   onChange={(e) =>
                     handleInputChange(
                       "education",
@@ -390,7 +431,7 @@ const ResumeBuilderPage = () => {
                 <input
                   type="date"
                   placeholder="Start Date"
-                  value={edu.startDate}
+                  value={edu.startDate || ""}
                   onChange={(e) =>
                     handleInputChange(
                       "education",
@@ -403,7 +444,7 @@ const ResumeBuilderPage = () => {
                 <input
                   type="date"
                   placeholder="End Date"
-                  value={edu.endDate}
+                  value={edu.endDate || ""}
                   onChange={(e) =>
                     handleInputChange(
                       "education",
@@ -416,7 +457,7 @@ const ResumeBuilderPage = () => {
                 <input
                   type="text"
                   placeholder="CGPA (optional)"
-                  value={edu.cgpa}
+                  value={edu.cgpa || ""}
                   onChange={(e) =>
                     handleInputChange(
                       "education",
@@ -446,7 +487,7 @@ const ResumeBuilderPage = () => {
                 <input
                   type="text"
                   placeholder="Company"
-                  value={exp.company}
+                  value={exp.company || ""}
                   onChange={(e) =>
                     handleInputChange(
                       "workExperience",
@@ -459,7 +500,7 @@ const ResumeBuilderPage = () => {
                 <input
                   type="text"
                   placeholder="Designation"
-                  value={exp.designation}
+                  value={exp.designation || ""}
                   onChange={(e) =>
                     handleInputChange(
                       "workExperience",
@@ -472,7 +513,7 @@ const ResumeBuilderPage = () => {
                 <input
                   type="date"
                   placeholder="Start Date"
-                  value={exp.startDate}
+                  value={exp.startDate || ""}
                   onChange={(e) =>
                     handleInputChange(
                       "workExperience",
@@ -485,7 +526,7 @@ const ResumeBuilderPage = () => {
                 <input
                   type="date"
                   placeholder="End Date"
-                  value={exp.endDate}
+                  value={exp.endDate || ""}
                   onChange={(e) =>
                     handleInputChange(
                       "workExperience",
@@ -836,7 +877,10 @@ const ResumeBuilderPage = () => {
           </section>
         </div>
       </div>
-      <button onClick={downloadPdf}>Download as PDF</button>
+      <div className="resume-builder-save">
+        <button onClick={downloadPdf}>Download as PDF</button>
+        <button onClick={deleteResume}>Delete Resume</button>
+      </div>
     </div>
   );
 };
