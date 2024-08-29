@@ -20,10 +20,12 @@ const ResumeBuilderPage = () => {
   const [resumeExists, setResumeExists] = useState(false);
   useEffect(() => {
     const fetchResumeData = async () => {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       const userId = getUserIdFromToken(token);
       if (!token || !userId) {
         console.error("No token found, cannot fetch resume data");
+        setIsLoading(false);
         return;
       }
 
@@ -36,17 +38,16 @@ const ResumeBuilderPage = () => {
             },
           }
         );
-        setResumeData(response.data.data[0]);
-        setResumeExists(true);
-        // if (response.data.length >= 0) {
-        //   console.log(response.data);
-        //   setResumeData(response.data);
-        //   setResumeExists(true);
-        // } else {
-        //   setResumeExists(false);
-        // }
+        if (response.data.data && response.data.data.length > 0) {
+          setResumeData(response.data.data[0]);
+          setResumeExists(true);
+        } else {
+          setResumeExists(false);
+        }
       } catch (error) {
         console.error("Error fetching resume data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -92,6 +93,8 @@ const ResumeBuilderPage = () => {
     extracurricular: [],
     leadership: [],
   });
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const [activeSection, setActiveSection] = useState("basicInfo");
   const [newSkill, setNewSkill] = useState("");
@@ -752,135 +755,148 @@ const ResumeBuilderPage = () => {
 
   return (
     <div className="resume-builder">
-      <div className="resume-builder-sidebar">
-        <button onClick={() => setActiveSection("basicInfo")}>
-          Basic Info
-        </button>
-        <button onClick={() => setActiveSection("education")}>Education</button>
-        <button onClick={() => setActiveSection("workExperience")}>
-          Work Experience
-        </button>
-        <button onClick={() => setActiveSection("skills")}>Skills</button>
-        <button onClick={() => setActiveSection("achievements")}>
-          Achievements
-        </button>
-        <button onClick={() => setActiveSection("projects")}>Projects</button>
-        <button onClick={() => setActiveSection("extracurricular")}>
-          Extracurricular
-        </button>
-        <button onClick={() => setActiveSection("leadership")}>
-          Leadership
-        </button>
-      </div>
-      <div className="resume-builder-content">{renderForm()}</div>
-      <div className="resume-preview" id="resume-preview">
-        <div className="resume">
-          <header>
-            <h1>
-              {resumeData.basicInfo.firstName} {resumeData.basicInfo.lastName}
-            </h1>
-            <p>
-              {resumeData.basicInfo.email} | {resumeData.basicInfo.contact} |{" "}
-              {resumeData.basicInfo.address}
-            </p>
-            <p>
-              {resumeData.basicInfo.linkedin} | {resumeData.basicInfo.github}
-            </p>
-          </header>
-
-          <section>
-            <h2>OBJECTIVE</h2>
-            <p>{resumeData.basicInfo.objective}</p>
-          </section>
-
-          <section>
-            <h2>EDUCATION</h2>
-            {resumeData.education.map((edu, index) => (
-              <div key={index}>
-                <h3>
-                  {edu.degree} in {edu.fieldOfStudy}
-                </h3>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="resume-builder">
+          <div className="resume-builder-sidebar">
+            <button onClick={() => setActiveSection("basicInfo")}>
+              Basic Info
+            </button>
+            <button onClick={() => setActiveSection("education")}>
+              Education
+            </button>
+            <button onClick={() => setActiveSection("workExperience")}>
+              Work Experience
+            </button>
+            <button onClick={() => setActiveSection("skills")}>Skills</button>
+            <button onClick={() => setActiveSection("achievements")}>
+              Achievements
+            </button>
+            <button onClick={() => setActiveSection("projects")}>
+              Projects
+            </button>
+            <button onClick={() => setActiveSection("extracurricular")}>
+              Extracurricular
+            </button>
+            <button onClick={() => setActiveSection("leadership")}>
+              Leadership
+            </button>
+          </div>
+          <div className="resume-builder-content">{renderForm()}</div>
+          <div className="resume-preview" id="resume-preview">
+            <div className="resume">
+              <header>
+                <h1>
+                  {resumeData.basicInfo.firstName}{" "}
+                  {resumeData.basicInfo.lastName}
+                </h1>
                 <p>
-                  {edu.institute}, {edu.location}
+                  {resumeData.basicInfo.email} | {resumeData.basicInfo.contact}{" "}
+                  | {resumeData.basicInfo.address}
                 </p>
                 <p>
-                  {edu.startDate} - {edu.endDate}
+                  {resumeData.basicInfo.linkedin} |{" "}
+                  {resumeData.basicInfo.github}
                 </p>
-                {edu.cgpa && <p>CGPA: {edu.cgpa}</p>}
-              </div>
-            ))}
-          </section>
+              </header>
 
-          <section>
-            <h2>WORK EXPERIENCE</h2>
-            {resumeData.workExperience.map((job, index) => (
-              <div key={index}>
-                <h3>
-                  {job.designation} at {job.company}
-                </h3>
+              <section>
+                <h2>OBJECTIVE</h2>
+                <p>{resumeData.basicInfo.objective}</p>
+              </section>
+
+              <section>
+                <h2>EDUCATION</h2>
+                {resumeData.education.map((edu, index) => (
+                  <div key={index}>
+                    <h3>
+                      {edu.degree} in {edu.fieldOfStudy}
+                    </h3>
+                    <p>
+                      {edu.institute}, {edu.location}
+                    </p>
+                    <p>
+                      {edu.startDate} - {edu.endDate}
+                    </p>
+                    {edu.cgpa && <p>CGPA: {edu.cgpa}</p>}
+                  </div>
+                ))}
+              </section>
+
+              <section>
+                <h2>WORK EXPERIENCE</h2>
+                {resumeData.workExperience.map((job, index) => (
+                  <div key={index}>
+                    <h3>
+                      {job.designation} at {job.company}
+                    </h3>
+                    <p>
+                      {job.startDate} - {job.endDate}
+                    </p>
+                  </div>
+                ))}
+              </section>
+
+              <section>
+                <h2>SKILLS</h2>
                 <p>
-                  {job.startDate} - {job.endDate}
+                  <strong>Technical Skills:</strong>{" "}
+                  {resumeData.skills.technical.join(", ")}
                 </p>
-              </div>
-            ))}
-          </section>
+                <p>
+                  <strong>Soft Skills:</strong>{" "}
+                  {resumeData.skills.soft.join(", ")}
+                </p>
+                <p>
+                  <strong>Additional Skills:</strong>{" "}
+                  {resumeData.skills.additional.join(", ")}
+                </p>
+              </section>
 
-          <section>
-            <h2>SKILLS</h2>
-            <p>
-              <strong>Technical Skills:</strong>{" "}
-              {resumeData.skills.technical.join(", ")}
-            </p>
-            <p>
-              <strong>Soft Skills:</strong> {resumeData.skills.soft.join(", ")}
-            </p>
-            <p>
-              <strong>Additional Skills:</strong>{" "}
-              {resumeData.skills.additional.join(", ")}
-            </p>
-          </section>
+              <section>
+                <h2>ACHIEVEMENTS</h2>
+                <ul>
+                  {resumeData.achievements.map((achievement, index) => (
+                    <li key={index}>{achievement}</li>
+                  ))}
+                </ul>
+              </section>
 
-          <section>
-            <h2>ACHIEVEMENTS</h2>
-            <ul>
-              {resumeData.achievements.map((achievement, index) => (
-                <li key={index}>{achievement}</li>
-              ))}
-            </ul>
-          </section>
+              <section>
+                <h2>PROJECTS</h2>
+                <ul>
+                  {resumeData.projects.map((project, index) => (
+                    <li key={index}>{project}</li>
+                  ))}
+                </ul>
+              </section>
 
-          <section>
-            <h2>PROJECTS</h2>
-            <ul>
-              {resumeData.projects.map((project, index) => (
-                <li key={index}>{project}</li>
-              ))}
-            </ul>
-          </section>
+              <section>
+                <h2>EXTRACURRICULAR ACTIVITIES</h2>
+                <ul>
+                  {resumeData.extracurricular.map((activity, index) => (
+                    <li key={index}>{activity}</li>
+                  ))}
+                </ul>
+              </section>
 
-          <section>
-            <h2>EXTRACURRICULAR ACTIVITIES</h2>
-            <ul>
-              {resumeData.extracurricular.map((activity, index) => (
-                <li key={index}>{activity}</li>
-              ))}
-            </ul>
-          </section>
-
-          <section>
-            <h2>LEADERSHIP</h2>
-            <ul>
-              {resumeData.leadership.map((experience, index) => (
-                <li key={index}>{experience}</li>
-              ))}
-            </ul>
-          </section>
+              <section>
+                <h2>LEADERSHIP</h2>
+                <ul>
+                  {resumeData.leadership.map((experience, index) => (
+                    <li key={index}>{experience}</li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+          </div>
+          <div className="resume-builder-save">
+            <button onClick={downloadPdf}>Download as PDF</button>
+            <button onClick={deleteResume}>Delete Resume</button>
+          </div>
         </div>
-      </div>
-      <div className="resume-builder-save">
-        <button onClick={downloadPdf}>Download as PDF</button>
-        <button onClick={deleteResume}>Delete Resume</button>
-      </div>
+      )}
     </div>
   );
 };
